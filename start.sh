@@ -32,7 +32,7 @@ if [[ "$PHP_BINARY" == "" ]]; then
 fi
 
 if [[ "$RUNNER_FILE" == "" ]]; then
-	if [[ -f ./src/kodportali/run.php ]]; then
+	if [[ -f ./src/Artemis/run.php ]]; then
 		RUNNER_FILE="./src/Artemis/run.php"
 	else
 		echo "src/Artemis/run.php not found"
