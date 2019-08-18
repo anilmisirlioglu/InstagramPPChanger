@@ -21,31 +21,30 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
 
 ### Yazılımın Çalışma Mantığı Nedir?
     Yazılım PHP tabanlı olarak çalışır. [mgp25/instagram](https://github.com/mgp25/Instagram-API) API 'si ile çalışır.
-    Görüntüler tamamen random olarak gelir ve düzenlenir. Ardından Instagram profil fotoğrafınız
-    güncellenir. Yazılım sadece komut arayüzünde çalışır.
+    Görüntüler tamamen random olarak gelir ve düzenlenir. Ardından Instagram profil fotoğrafınız güncellenir. Yazılım 
+    sadece komut arayüzünde çalışır.
     
 ### Hesap Bilgilerimiz Depolanıyor mu?
-    Hayır hesap verileriniz depolanmıyor. Tamamen sizin kendi bilgisayarınızda kalıyor. 3.parti sunuculara
-    aktarılmıyor. Tamamen güvenlidir.
+    Hayır hesap verileriniz depolanmıyor. Tamamen sizin kendi bilgisayarınızda kalıyor. 3.parti sunuculara aktarılmıyor.
+     Tamamen güvenlidir.
     
 ### Instagram Hesabıma Yazılımdan Nasıl Giriş Yapacağım?
-    config.json dosyasınde belirtilen yerlere kullanıcı adınız ve şifrenizi yazdığınız takdirde sistem
-    otomatik olarak giriş yapıcaktır.
+    config.json dosyasınde belirtilen yerlere kullanıcı adınız ve şifrenizi yazdığınız takdirde sistem otomatik olarak 
+    giriş yapıcaktır.
     
 ### Yazılımı Nasıl Çalıştıracağım?
-    Yazılımı buradan indirip kullandığınız platforma göre başlatın. Eğer windows kullanıyorsanız 'start.cmd'
-    veya 'start.ps1' dosyasına çift tıklayıp çalıştırmanız yeterlidir. Linux kullanıcıları projeyi klonlayıp
-    yazılımın kök dizinine gidip './start.sh' yazması yeterli olucaktır. Sadece komut arayüzünde (cli) çalış
-    ır. Ayrıca composer'i kurmayı unutmayınız.
+    Yazılımı buradan indirip kullandığınız platforma göre başlatın. Eğer windows kullanıyorsanız 'start.cmd' veya 
+    'start.ps1' dosyasına çift tıklayıp çalıştırmanız yeterlidir. Linux kullanıcıları projeyi klonlayıp yazılımın 
+    kök dizinine gidip './start.sh' yazması yeterli olucaktır. Sadece komut arayüzünde (cli) çalışır. Ayrıca çalış
+    tırmadan önce composer'i kurmayı unutmayınız.
     
    
 ### Yazılımı Bir Kere Çalıştırdıktan Sonra Kapatsak Sorun Olurmur?
-    Eğer her dakika güncellenmesini istiyorsanız yazılımın her daim açık kalması gerekir. Kapattığınız taktirde
-    profil fotoğrafınızı değiştirmeyide durdurur. 
+    Eğer her dakika güncellenmesini istiyorsanız yazılımın her daim açık kalması gerekir. Kapattığınız taktirde profil 
+    fotoğrafınızı değiştirmeyide durdurur. 
     
     
 ### Çalıştırdığımız Zaman PHP Extension Hatası Alıyorum, Neden?
-    Bunun sebebi gerekli php eklentilerinin kurulu olmamasıdır. Bunun için dosya içinde bulunan 'bin' dosyasını
-    kullanın.
---- 
-![kodportali](src/Artemis/assets/images/static/kodportali.png)
+    Bunun sebebi gerekli php eklentilerinin kurulu olmamasıdır. Bunun için dosya içinde bulunan 'bin' dosyasını kullanın.
+
+#![kodportali](src/Artemis/assets/images/static/kodportali.png)
