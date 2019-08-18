@@ -1,0 +1,25 @@
+{
+  "name": "nightrich/instagramppupdater",
+  "license": "MIT",
+  "description": "Anlık instagram profil fotoğrafı güncelleyici.",
+  "type": "project",
+  "homepage": "https://kodportali.com",
+  "require": {
+    "php": ">=7.2",
+    "mgp25/instagram-php": "dev-master",
+    "ext-gd":  "*",
+    "ext-json": "*",
+    "ext-curl": "*"
+  },
+  "authors": [
+    {
+      "name": "Anıl Mısırlıoğlu",
+      "email": "misirlioglisamet@gmail.com",
+      "homepage": "https://kodportali.com",
+      "role": "Owner & Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"": "src/"}
+  }
+}
