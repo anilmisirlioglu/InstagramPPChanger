@@ -25,15 +25,15 @@ trait Internet{
     public function downloadRandomImage() : void{
         file_put_contents(
             __DIR__ . '/../assets/images/image.jpg',
-            file_get_contents(sprintf(
+            ($content = file_get_contents(sprintf(
                 Config::IMAGE_API_URL,
                 mt_rand(0, 1085) /* Total image count*/,
                 Config::INSTAGRAM_PP_SIZES,
                 Config::INSTAGRAM_PP_SIZES
-            ))
+            )))
         );
 
-        Terminal::log(Terminal::AQUA . 'API \'den yeni resim başarıyla indirildi.', IMAGE_API);
+        !$content ? $this->downloadRandomImage() : Terminal::log(Terminal::AQUA . 'API \'den yeni resim başarıyla indirildi.', IMAGE_API);
     }
 
 }
