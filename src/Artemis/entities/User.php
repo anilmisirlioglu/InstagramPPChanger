@@ -18,32 +18,26 @@
  *
  */
 
-namespace Artemis\entitys;
+namespace Artemis\entities;
 
-use Artemis\utils\Config;
-use Artemis\utils\Terminal;
-use Exception;
+class User{
 
-class Settings{
+    /** @var string */
+    private $username;
+    /** @var string */
+    private $password;
 
-    /** @var User */
-    private $user;
-
-    public function __construct(){
-        try{
-            Terminal::log(Terminal::GREEN . 'Ayar dosyası okunuyor.', SYSTEM);
-
-            $json = json_decode(file_get_contents(Config::CONFIG_JSON_DIR));
-            $this->user = new User($json->username, $json->password);
-
-            Terminal::log(Terminal::GREEN . 'Ayar dosyası başarıyla okundu.', SYSTEM);
-        }catch(Exception $exception){
-            die('Olmaması gereken bir hata ile karşılaştık. Hata: ' . $exception->getMessage());
-        }
+    public function __construct(string $username, string $password){
+        $this->username = $username;
+        $this->password = $password;
     }
 
-    public function getUser(){
-        return $this->user;
+    public function getUsername() : string{
+        return $this->username;
+    }
+
+    public function getPassword() : string{
+        return $this->password;
     }
 
 }
