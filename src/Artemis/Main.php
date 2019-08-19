@@ -21,7 +21,6 @@
 namespace Artemis;
 
 use Artemis\entitys\Settings;
-use Artemis\utils\Config;
 use Artemis\utils\ImageCompress;
 use Artemis\utils\Internet;
 use Artemis\utils\Terminal;
