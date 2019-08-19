@@ -13,6 +13,7 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
   - ext-curl
   - ext-gd
   - ext-json
+  - ext-exif
   - [mgp25/instagram](https://github.com/mgp25/Instagram-API)
 
 ---
@@ -20,7 +21,7 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
 ## SSS
 
 ### Yazılımın Çalışma Mantığı Nedir?
-    Yazılım PHP tabanlı olarak çalışır. [mgp25/instagram](https://github.com/mgp25/Instagram-API) API 'si ile çalışır.
+    Yazılım PHP tabanlı olarak çalışır. mgp25/instagram API 'si ile çalışır.
     Görüntüler tamamen random olarak gelir ve düzenlenir. Ardından Instagram profil fotoğrafınız güncellenir. Yazılım 
     sadece komut arayüzünde çalışır.
     
@@ -46,5 +47,11 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
     
 ### Çalıştırdığımız Zaman PHP Extension Hatası Alıyorum, Neden?
     Bunun sebebi gerekli php eklentilerinin kurulu olmamasıdır. Bunun için dosya içinde bulunan 'bin' dosyasını kullanın.
+    
+    
+### cURL Hatası Alıyorum, Neden?
+    Proje içindeki 'bin/php/cacert.pem' dosyasının, dosya yolunu yine aynı 'bin/php' içindeki 'php.ini' dosyasındaki 
+    'curl.cainfo' karşısına yapıştırın.
 
-#![kodportali](src/Artemis/assets/images/static/kodportali.png)
+
+![kodportali](src/Artemis/assets/images/static/kodportali.png)
