@@ -20,9 +20,11 @@
 
 namespace Artemis;
 
-use Artemis\entitys\Settings;
+use Artemis\entities\Settings;
+use Artemis\utils\Config;
 use Artemis\utils\ImageCompress;
 use Artemis\utils\Internet;
+use Artemis\utils\Signal;
 use Artemis\utils\Terminal;
 use Exception;
 use InstagramAPI\Instagram;
@@ -42,7 +44,7 @@ class Main{
         Terminal::log(Terminal::GOLD . 'Uygulama başlatılıyor...', SYSTEM);
 
         $this->settings = new Settings;
-        $this->imageCompress = new ImageCompress();
+        $this->imageCompress = new ImageCompress;
         $this->startInstagram();
 
         $this->startApp();

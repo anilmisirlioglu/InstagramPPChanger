@@ -51,7 +51,7 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
     
 ### cURL Hatası Alıyorum, Neden?
     Proje içindeki 'bin/php/cacert.pem' dosyasının, dosya yolunu yine aynı 'bin/php' içindeki 'php.ini' dosyasındaki 
-    'curl.cainfo' karşısına yapıştırın.
+    'curl.cainfo' karşısına yapıştırın. 
 
 
 ![kodportali](src/Artemis/assets/images/static/kodportali.png)
