@@ -23,9 +23,6 @@ namespace Artemis\utils;
 class Config{
 
     /** @var int */
-    public const SLEEP_SECOND = 60;
-
-    /** @var int */
     public const INSTAGRAM_PP_SIZES = 320; // 320px x 320px
 
     /** @var int */

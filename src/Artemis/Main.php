@@ -40,7 +40,7 @@ class Main{
     private $imageCompress;
 
     public function __construct(){
-        Terminal::log(Terminal::GREEN . 'Uygulama başlatılıyor...', SYSTEM);
+        Terminal::log(Terminal::GOLD . 'Uygulama başlatılıyor...', SYSTEM);
 
         $this->settings = new Settings;
         $this->imageCompress = new ImageCompress();
@@ -86,6 +86,8 @@ class Main{
     }
 
     private function startApp() : void{
+        sleep(60 - (time() % 60));
+
         while(true){
             Terminal::log(Terminal::LIGHT_PURPLE . 'Sistem tekrardan aktif.', SYSTEM);
 
@@ -93,19 +95,26 @@ class Main{
 
             $dir = __DIR__ . '/assets/images/image.%s';
             $jpg = sprintf($dir, 'jpg');
+
             Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına çevriliyor...', IMAGE_PROCESSOR);
+
             $this->imageCompress->jpgConvertToPng($jpg);
+
             Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına başarıyla çevrildi.', IMAGE_PROCESSOR);
             unlink($jpg);
+
             Terminal::log(Terminal::RED . 'Eski görüntü verisi silindi.', SYSTEM);
 
             $png = sprintf($dir, 'png');
+
             Terminal::log(Terminal::GREEN . 'Görüntü yeniden boyutlandırıp, yeniden düzenleniyor...', IMAGE_PROCESSOR);
+
             $this->imageCompress
                 ->resizeImage($png)
                 ->drawCircleOnImage($png)
                 ->writeOnImage($png, date('H:i'))
                 ->writeOnImage($png, PHP_EOL . date('d.m.Y'));
+
             Terminal::log(Terminal::GREEN . 'Görüntü yeniden boyutlandırıldı ve düzenlendi. Görüntü verisi kaydedildi.', IMAGE_PROCESSOR);
 
             try{
@@ -116,9 +125,12 @@ class Main{
                 Terminal::log(Terminal::RED . 'Profil fotoğrafı bir sebepten dolayı değiştirilemedi. Program kapatılıyor. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
             }
 
-            Terminal::log(Terminal::GOLD . 'Bir dahaki güncelleme için ' . Terminal::AQUA . Config::SLEEP_SECOND . ' saniye bekleniyor...');
-            sleep(Config::SLEEP_SECOND);
+            $sleep = 60 - (time() % 60);
+            Terminal::log(Terminal::GOLD . 'Bir dahaki güncelleme için ' . Terminal::AQUA . $sleep . Terminal::GOLD . ' saniye bekleniyor...');
+
+            usleep(($sleep * 1000000) - 500000);
         }
+
     }
 
 }
