@@ -39,6 +39,7 @@ namespace Artemis{
         critical_error(NAME . ' requires PHP >= ' . MIN_PHP_VERSION . ', but you have PHP ' . PHP_VERSION . '.');
 
     ini_set('memory_limit', '-1');
+    error_reporting(E_WARNING);
 
     date_default_timezone_set('Europe/Istanbul');
 
