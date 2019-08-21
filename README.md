@@ -58,4 +58,8 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
     'congig.json' dosyası içerisindeki 'timezone' değerini değiştirerek kendi ülkenin zaman dilimine ayarlayabilirsin. 
     PHP tarafından desteklenen tüm zaman dilimleri için bu linke bakın: https://www.php.net/manual/tr/timezones.php
 
+---
+# LICENSE
+[License](LICENSE)
+---
 ![kodportali](src/Artemis/assets/images/static/kodportali.png)
