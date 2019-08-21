@@ -28,6 +28,8 @@ class Settings{
 
     /** @var User */
     private $user;
+    /** @var string */
+    private $timezone;
 
     public function __construct(){
         try{
@@ -35,6 +37,7 @@ class Settings{
 
             $json = json_decode(file_get_contents(Config::CONFIG_JSON_DIR));
             $this->user = new User($json->username, $json->password);
+            $this->timezone = $json->timezone;
 
             Terminal::log(Terminal::GREEN . 'Ayar dosyası başarıyla okundu.', SYSTEM);
         }catch(Exception $exception){
@@ -42,8 +45,12 @@ class Settings{
         }
     }
 
-    public function getUser(){
+    public function getUser() : User{
         return $this->user;
+    }
+
+    public function getTimezone() : string{
+        return $this->timezone;
     }
 
 }

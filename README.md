@@ -6,6 +6,7 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
 
 ## Ekran Görüntüsü
 ![SS](src/Artemis/assets/images/static/screenshoot.PNG)
+
 ---
 ## Gereksinimler
 
@@ -53,5 +54,8 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
     Proje içindeki 'bin/php/cacert.pem' dosyasının, dosya yolunu yine aynı 'bin/php' içindeki 'php.ini' dosyasındaki 
     'curl.cainfo' karşısına yapıştırın. 
 
+### Kendi ülkemin zaman dilimini nasıl ayarlayabilirim?
+    'congig.json' dosyası içerisindeki 'timezone' değerini değiştirerek kendi ülkenin zaman dilimine ayarlayabilirsin. 
+    PHP tarafından desteklenen tüm zaman dilimleri için bu linke bakın: https://www.php.net/manual/tr/timezones.php
 
 ![kodportali](src/Artemis/assets/images/static/kodportali.png)

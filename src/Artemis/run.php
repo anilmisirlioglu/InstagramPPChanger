@@ -40,8 +40,6 @@ namespace Artemis{
 
     ini_set('memory_limit', '-1');
 
-    date_default_timezone_set('Europe/Istanbul');
-
     define('Artemis\PATH', dirname(__FILE__, 3) . DIRECTORY_SEPARATOR);
     define('Artemis\COMPOSER_AUTOLOAD_PATH', PATH . 'vendor/autoload.php');
 

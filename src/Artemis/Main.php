@@ -69,7 +69,8 @@ class Main{
 
             $response = $this->instagram->login(
                 ($username = $user->getUsername()),
-                ($password = $user->getPassword()));
+                ($password = $user->getPassword())
+            );
 
             if($response !== null and $response->isTwoFactorRequired()){
                 Terminal::log(Terminal::YELLOW . 'Hesabınızın iki adımlı doğrulaması açık. Lütfen size gelen doğrulama kodunu giriniz...', API);
@@ -80,13 +81,17 @@ class Main{
 
             Terminal::log(Terminal::GOLD . $username . Terminal::GREEN . ' hesabına başarıyla giriş yapıldı.', API);
         }catch(Exception $exception){
-            Terminal::log(Terminal::RED . 'Bir sebepten dolayı hesabınıza girşi yapamadık. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
+            Terminal::log(Terminal::RED . 'Bir sebepten dolayı hesabınıza giriş yapamadık. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
             exit(1);
         }
 
     }
 
     private function startApp() : void{
+        date_default_timezone_set(($zone = $this->settings->getTimezone()));
+
+        Terminal::log(Terminal::DARK_PURPLE . 'Sistemin zaman dilimi ' . Terminal::WHITE . $zone . Terminal::DARK_PURPLE . ' olarak ayarlandı.', SYSTEM);
+
         sleep(60 - (time() % 60));
 
         while(true){
