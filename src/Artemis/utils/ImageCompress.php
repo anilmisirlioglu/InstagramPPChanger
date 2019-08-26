@@ -100,8 +100,8 @@ class ImageCompress{
         return $this;
     }
 
-    public function jpgConvertToPng(string $file) : ImageCompress{
-        imagepng(imagecreatefromstring(file_get_contents($file)), dirname($file, 1) . DIRECTORY_SEPARATOR . 'image.png');
+    public function jpgConvertToPng(string $file, string $fileName = null) : ImageCompress{
+        imagepng(imagecreatefromstring(file_get_contents($file)), dirname($file, 1) . DIRECTORY_SEPARATOR . ($fileName == null ? 'image.png' : $fileName . '.png'));
 
         return $this;
     }

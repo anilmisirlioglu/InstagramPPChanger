@@ -24,7 +24,6 @@ use Artemis\entities\Settings;
 use Artemis\utils\Config;
 use Artemis\utils\ImageCompress;
 use Artemis\utils\Internet;
-use Artemis\utils\Signal;
 use Artemis\utils\Terminal;
 use Exception;
 use InstagramAPI\Instagram;
@@ -39,6 +38,8 @@ class Main{
     private $settings;
     /** @var ImageCompress */
     private $imageCompress;
+    /** @var array */
+    private $images = [];
 
     public function __construct(){
         Terminal::log(Terminal::GOLD . 'Uygulama başlatılıyor...', SYSTEM);
@@ -87,54 +88,109 @@ class Main{
 
     }
 
+    private function setupImageSys(){
+        if(!$this->settings->getRandomImageOpt()){
+            Terminal::log(Terminal::GREEN . 'Görüntüler kullanıcı tarafından belirlenenler arasından çekilicek.');
+
+            if(file_exists(Config::USER_IMAGES_DIR)){
+                $open = opendir(Config::USER_IMAGES_DIR);
+                while(($read = readdir($open))){
+                    if(is_file(($dir = Config::USER_IMAGES_DIR . DIRECTORY_SEPARATOR . $read))){
+                        $ext = pathinfo($dir)['extension'];
+                        if($ext == 'jpg' or $ext = 'png')
+                            $this->images[] = $dir;
+                    }
+                }
+            }
+
+            if(count($this->images) == 0){
+                Terminal::log(Terminal::RED . 'Sistem png formatında resim bulamadı.', IMAGE_PROCESSOR);
+                exit(1);
+            }
+        }else Terminal::log(Terminal::GREEN . 'Görüntüler internetten rastgele arasından çekilicek.');
+    }
+
     private function startApp() : void{
         date_default_timezone_set(($zone = $this->settings->getTimezone()));
 
         Terminal::log(Terminal::DARK_PURPLE . 'Sistemin zaman dilimi ' . Terminal::WHITE . $zone . Terminal::DARK_PURPLE . ' olarak ayarlandı.', SYSTEM);
 
+        $this->setupImageSys();
+
         sleep(60 - (time() % 60));
 
+        $i = 0;
+        $staticFile = __DIR__ . '/assets/images/image.%s';
         while(true){
             Terminal::log(Terminal::LIGHT_PURPLE . 'Sistem tekrardan aktif.', SYSTEM);
 
-            $this->downloadRandomImage();
+            $png = null;
+            if(!$this->settings->getRandomImageOpt()){
+                $path = $this->images[$i];
+                $pathInfo = pathinfo($path);
+                if($pathInfo['extension'] == 'jpg'){
+                    Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına çevriliyor...', IMAGE_PROCESSOR);
 
-            $dir = __DIR__ . '/assets/images/image.%s';
-            $jpg = sprintf($dir, 'jpg');
+                    $this->imageCompress->jpgConvertToPng($path, $pathInfo['filename']);
 
-            Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına çevriliyor...', IMAGE_PROCESSOR);
+                    Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına başarıyla çevrildi.', IMAGE_PROCESSOR);
 
-            $this->imageCompress->jpgConvertToPng($jpg);
+                    unlink($path);
 
-            Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına başarıyla çevrildi.', IMAGE_PROCESSOR);
-            unlink($jpg);
+                    $this->images[$i] = str_replace('jpg', 'png', $path);;
 
-            Terminal::log(Terminal::RED . 'Eski görüntü verisi silindi.', SYSTEM);
+                    Terminal::log(Terminal::RED . 'Eski görüntü verisi silindi.', SYSTEM);
+                }
+                file_put_contents(
+                    ($png = sprintf($staticFile, 'png')),
+                    file_get_contents($this->images[$i])
+                );
+            }else{
+                $this->downloadRandomImage();
 
-            $png = sprintf($dir, 'png');
+                $jpg = sprintf($staticFile, 'jpg');
 
-            Terminal::log(Terminal::GREEN . 'Görüntü yeniden boyutlandırıp, yeniden düzenleniyor...', IMAGE_PROCESSOR);
+                Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına çevriliyor...', IMAGE_PROCESSOR);
 
-            $this->imageCompress
-                ->resizeImage($png)
-                ->drawCircleOnImage($png)
-                ->writeOnImage($png, date('H:i'))
-                ->writeOnImage($png, PHP_EOL . date('d.m.Y'));
+                $this->imageCompress->jpgConvertToPng($jpg);
 
-            Terminal::log(Terminal::GREEN . 'Görüntü yeniden boyutlandırıldı ve düzenlendi. Görüntü verisi kaydedildi.', IMAGE_PROCESSOR);
+                Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına başarıyla çevrildi.', IMAGE_PROCESSOR);
+                unlink($jpg);
 
-            try{
-                $this->instagram->account->changeProfilePicture($png);
+                Terminal::log(Terminal::RED . 'Eski görüntü verisi silindi.', SYSTEM);
 
-                Terminal::log(Terminal::GREEN . 'Profil fotoğrafınız güncellendi.', API);
-            }catch(Exception $exception){
-                Terminal::log(Terminal::RED . 'Profil fotoğrafı bir sebepten dolayı değiştirilemedi. Program kapatılıyor. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
+                $png = sprintf($staticFile, 'png');
             }
 
-            $sleep = 60 - (time() % 60);
-            Terminal::log(Terminal::GOLD . 'Bir dahaki güncelleme için ' . Terminal::AQUA . $sleep . Terminal::GOLD . ' saniye bekleniyor...');
+            if($png != null){
+                Terminal::log(Terminal::GREEN . 'Görüntü yeniden boyutlandırıp, yeniden düzenleniyor...', IMAGE_PROCESSOR);
 
-            usleep(($sleep * 1000000) - 500000);
+                $this->imageCompress
+                    ->resizeImage($png)
+                    ->drawCircleOnImage($png)
+                    ->writeOnImage($png, date('H:i'))
+                    ->writeOnImage($png, PHP_EOL . date('d.m.Y'));
+
+                Terminal::log(Terminal::GREEN . 'Görüntü yeniden boyutlandırıldı ve düzenlendi. Görüntü verisi kaydedildi.', IMAGE_PROCESSOR);
+
+                try{
+                    $this->instagram->account->changeProfilePicture($png);
+
+                    Terminal::log(Terminal::GREEN . 'Profil fotoğrafınız güncellendi.', API);
+                }catch(Exception $exception){
+                    Terminal::log(Terminal::RED . 'Profil fotoğrafı bir sebepten dolayı değiştirilemedi. Program kapatılıyor. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
+                }
+
+                $sleep = 60 - (time() % 60);
+                Terminal::log(Terminal::GOLD . 'Bir dahaki güncelleme için ' . Terminal::AQUA . $sleep . Terminal::GOLD . ' saniye bekleniyor...');
+
+                $i++;
+
+                usleep(($sleep * 1000000) - 500000);
+            }else{
+                Terminal::log(Terminal::RED . 'Sistem belirlenemeyen bir hata sebebi ile çöktü.', SYSTEM);
+                exit(1);
+            }
         }
 
     }

@@ -41,6 +41,8 @@ class Config{
     public const IMAGE_API_URL = 'https://picsum.photos/id/%d/%d/%d?blur=2';
 
     /** @var string */
+    public const USER_IMAGES_DIR = __DIR__ . '/../assets/images/user-images';
+    /** @var string */
     public const CONFIG_JSON_DIR = __DIR__ . '/../../../config.json';
 
     /**
