@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace Artemis{
 
     function critical_error($message){
-        echo '[ERROR] ' . $message . PHP_EOL;
+        echo '[HATA] ' . $message . PHP_EOL;
     }
 
     define('Artemis\NAME', 'Instagram Profil Photo Updater');

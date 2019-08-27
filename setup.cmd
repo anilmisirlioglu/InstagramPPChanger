@@ -1,5 +1,5 @@
 @echo off
-TITLE InstagramPPUpdater Code by An!l
+TITLE InstagramPPUpdater Code by An!l [Setup]
 cd /d %~dp0
 
 if exist bin\php\php.exe (
@@ -9,10 +9,10 @@ if exist bin\php\php.exe (
     set PHP_BINARY="php"
 )
 
-if exist src\Artemis\run.php (
-    set RUNNER_FILE="src\Artemis\run.php"
+if exist src\Artemis\setup-windows.php (
+    set RUNNER_FILE="src\Artemis\setup-windows.php"
 ) else (
-    echo src\Artemis\run.php not found.
+    echo src\Artemis\setup-windows.php not found.
     pause
     exit 1
 )
