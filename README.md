@@ -1,4 +1,4 @@
-# Instagram PP Changer v1.3 
+# Instagram PP Changer v1.4
 # ![Instagram Logo](src/Artemis/assets/images/static/instagram.png) 
 Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı resimler ile günceller.
 

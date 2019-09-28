@@ -45,6 +45,9 @@ class Config{
     /** @var string */
     public const CONFIG_JSON_DIR = __DIR__ . '/../../../config.json';
 
+    /** @var string */
+    public const DEFAULT_TIMEZONE = 'Europe/Istanbul';
+
     /**
      * Renk kodları hexadecimal formatında olmak zorundadır.
      *

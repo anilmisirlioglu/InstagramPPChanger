@@ -39,8 +39,8 @@ class Settings{
 
             $json = json_decode(file_get_contents(Config::CONFIG_JSON_DIR));
             $this->user = new User($json->username, $json->password);
-            $this->timezone = $json->timezone;
-            $this->randomImage = $json->randomImage;
+            $this->timezone = $json->timezone ?? Config::DEFAULT_TIMEZONE;
+            $this->randomImage = $json->randomImage ?? true;
 
             Terminal::log(Terminal::GREEN . 'Ayar dosyası başarıyla okundu.', SYSTEM);
         }catch(Exception $exception){
