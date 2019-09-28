@@ -5,7 +5,7 @@ Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı res
 **NOT:** *Yazılım beta sürecindedir. Hataları [@kodportali](https://www.instagram.com/kodportali/) instagram hesabı üzerinden bildirebilirsiniz.*
 
 ## Ekran Görüntüsü
-![SS](src/Artemis/assets/images/static/screenshoot.PNG)
+![SS](src/Artemis/assets/images/static/screenshoot.png)
 
 ---
 ## Gereksinimler

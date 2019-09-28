@@ -1,6 +1,6 @@
 {
   "username": "kullanıcı-adı",
   "password": "şifre",
-  "timezone": "Europe/Istanbul",
-  "randomImage": true
+  "timezone": "auto",
+  "randomImage": false
 }

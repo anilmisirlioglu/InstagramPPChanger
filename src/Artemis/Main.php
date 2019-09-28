@@ -26,6 +26,7 @@ use Artemis\utils\Config;
 use Artemis\utils\ImageCompress;
 use Artemis\utils\Internet;
 use Artemis\utils\Terminal;
+use Artemis\utils\Timezone;
 use Exception;
 use InstagramAPI\Instagram;
 
@@ -37,6 +38,8 @@ class Main{
     private $instagram;
     /** @var Settings */
     private $settings;
+    /** @var Timezone */
+    private $timezone;
     /** @var ImageCompress */
     private $imageCompress;
     /** @var Image[] */
@@ -47,6 +50,7 @@ class Main{
 
         $this->settings = new Settings;
         $this->imageCompress = new ImageCompress;
+        $this->timezone = new Timezone($this->settings->getTimezone());
         $this->startInstagram();
 
         $this->startApp();
@@ -112,9 +116,7 @@ class Main{
     }
 
     private function startApp() : void{
-        date_default_timezone_set(($zone = $this->settings->getTimezone()));
-
-        logSys(Terminal::DARK_PURPLE . 'Sistemin zaman dilimi ' . Terminal::WHITE . $zone . Terminal::DARK_PURPLE . ' olarak ayarlandı.', SYSTEM);
+        logSys(Terminal::DARK_PURPLE . 'Sistemin zaman dilimi ' . Terminal::WHITE . $this->timezone->get() . Terminal::DARK_PURPLE . ' olarak ayarlandı.', SYSTEM);
 
         $this->setupImageSys();
 
