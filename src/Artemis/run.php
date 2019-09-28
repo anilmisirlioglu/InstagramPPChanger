@@ -22,8 +22,14 @@ declare(strict_types=1);
 
 namespace Artemis{
 
+    use Artemis\utils\Terminal;
+
     function critical_error($message){
         echo '[HATA] ' . $message . PHP_EOL;
+    }
+
+    function logSys(string $text, string $prefix = SYSTEM) : void{
+        Terminal::log($text, $prefix);
     }
 
     define('Artemis\NAME', 'Instagram Profil Photo Updater');

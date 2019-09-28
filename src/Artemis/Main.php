@@ -20,6 +20,7 @@
 
 namespace Artemis;
 
+use Artemis\entities\Image;
 use Artemis\entities\Settings;
 use Artemis\utils\Config;
 use Artemis\utils\ImageCompress;
@@ -38,11 +39,11 @@ class Main{
     private $settings;
     /** @var ImageCompress */
     private $imageCompress;
-    /** @var array */
+    /** @var Image[] */
     private $images = [];
 
     public function __construct(){
-        Terminal::log(Terminal::GOLD . 'Uygulama başlatılıyor...', SYSTEM);
+        logSys(Terminal::GOLD . 'Uygulama başlatılıyor...', SYSTEM);
 
         $this->settings = new Settings;
         $this->imageCompress = new ImageCompress;
@@ -52,12 +53,12 @@ class Main{
     }
 
     private function startInstagram() : void{
-        Terminal::log(Terminal::GREEN . 'Instagram başlatılıyor...', SYSTEM);
+        logSys(Terminal::GREEN . 'Instagram başlatılıyor...', SYSTEM);
 
         Instagram::$allowDangerousWebUsageAtMyOwnRisk = true;
         $this->instagram = new Instagram;
 
-        Terminal::log(Terminal::GREEN . 'Instagram başarıyla başlatıldı.', SYSTEM);
+        logSys(Terminal::GREEN . 'Instagram başarıyla başlatıldı.', SYSTEM);
 
         $this->loginInstagramAccount();
     }
@@ -66,7 +67,7 @@ class Main{
         $user = $this->settings->getUser();
 
         try{
-            Terminal::log(Terminal::YELLOW . 'Instagram hesabınıza giriş yapılıyor.', SYSTEM);
+            logSys(Terminal::YELLOW . 'Instagram hesabınıza giriş yapılıyor.', SYSTEM);
 
             $response = $this->instagram->login(
                 ($username = $user->getUsername()),
@@ -74,15 +75,15 @@ class Main{
             );
 
             if($response !== null and $response->isTwoFactorRequired()){
-                Terminal::log(Terminal::YELLOW . 'Hesabınızın iki adımlı doğrulaması açık. Lütfen size gelen doğrulama kodunu giriniz...', API);
+                logSys(Terminal::YELLOW . 'Hesabınızın iki adımlı doğrulaması açık. Lütfen size gelen doğrulama kodunu giriniz...', API);
                 $twoFactorIdentifier = $response->getTwoFactorInfo()->getTwoFactorIdentifier();
                 $verificationCode = trim(fgets(STDIN));
                 $this->instagram->finishTwoFactorLogin($username, $password, $twoFactorIdentifier, $verificationCode);
             }
 
-            Terminal::log(Terminal::GOLD . $username . Terminal::GREEN . ' hesabına başarıyla giriş yapıldı.', API);
+            logSys(Terminal::GOLD . $username . Terminal::GREEN . ' hesabına başarıyla giriş yapıldı.', API);
         }catch(Exception $exception){
-            Terminal::log(Terminal::RED . 'Bir sebepten dolayı hesabınıza giriş yapamadık. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
+            logSys(Terminal::RED . 'Bir sebepten dolayı hesabınıza giriş yapamadık. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
             exit(1);
         }
 
@@ -90,7 +91,7 @@ class Main{
 
     private function setupImageSys(){
         if(!$this->settings->getRandomImageOpt()){
-            Terminal::log(Terminal::GREEN . 'Görüntüler kullanıcı tarafından belirlenenler arasından çekilicek.');
+            logSys(Terminal::GREEN . 'Görüntüler kullanıcı tarafından belirlenenler arasından çekilicek.');
 
             if(file_exists(Config::USER_IMAGES_DIR)){
                 $open = opendir(Config::USER_IMAGES_DIR);
@@ -98,72 +99,75 @@ class Main{
                     if(is_file(($dir = Config::USER_IMAGES_DIR . DIRECTORY_SEPARATOR . $read))){
                         $ext = pathinfo($dir)['extension'];
                         if($ext == 'jpg' or $ext = 'png')
-                            $this->images[] = $dir;
+                            $this->images[] = new Image($dir);
                     }
                 }
             }
 
             if(count($this->images) == 0){
-                Terminal::log(Terminal::RED . 'Sistem png formatında resim bulamadı.', IMAGE_PROCESSOR);
+                logSys(Terminal::RED . 'Sistem png formatında resim bulamadı.', IMAGE_PROCESSOR);
                 exit(1);
             }
-        }else Terminal::log(Terminal::GREEN . 'Görüntüler internetten rastgele arasından çekilicek.');
+        }else logSys(Terminal::GREEN . 'Görüntüler internetten rastgele çekilicek.');
     }
 
     private function startApp() : void{
         date_default_timezone_set(($zone = $this->settings->getTimezone()));
 
-        Terminal::log(Terminal::DARK_PURPLE . 'Sistemin zaman dilimi ' . Terminal::WHITE . $zone . Terminal::DARK_PURPLE . ' olarak ayarlandı.', SYSTEM);
+        logSys(Terminal::DARK_PURPLE . 'Sistemin zaman dilimi ' . Terminal::WHITE . $zone . Terminal::DARK_PURPLE . ' olarak ayarlandı.', SYSTEM);
 
         $this->setupImageSys();
 
         sleep(60 - (time() % 60));
 
         $i = 0;
-        $staticFile = __DIR__ . '/assets/images/image.%s';
+        static $imageFile = __DIR__ . '/assets/images/image.%s';
         while(true){
-            Terminal::log(Terminal::LIGHT_PURPLE . 'Sistem tekrardan aktif.', SYSTEM);
+            logSys(Terminal::LIGHT_PURPLE . 'Sistem tekrardan aktif.', SYSTEM);
 
             $png = null;
             if(!$this->settings->getRandomImageOpt()){
-                $path = $this->images[$i];
-                $pathInfo = pathinfo($path);
-                if($pathInfo['extension'] == 'jpg'){
-                    Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına çevriliyor...', IMAGE_PROCESSOR);
+                $image = $this->images[$i] ?? (function(int &$i) : Image{
+                    $i = 0;
+                    return $this->images[$i];
+                })($i);
+                $path = $image->getPath();
+                if($image->getExtension() == 'jpg'){
+                    logSys(Terminal::GREEN . 'Görüntü jpg formatından png formatına çevriliyor...', IMAGE_PROCESSOR);
 
-                    $this->imageCompress->jpgConvertToPng($path, $pathInfo['filename']);
+                    $this->imageCompress->jpgConvertToPng($path, $image->getFilename());
 
-                    Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına başarıyla çevrildi.', IMAGE_PROCESSOR);
+                    logSys(Terminal::GREEN . 'Görüntü jpg formatından png formatına başarıyla çevrildi.', IMAGE_PROCESSOR);
 
                     unlink($path);
 
-                    $this->images[$i] = str_replace('jpg', 'png', $path);;
+                    $image->setPath(str_replace('jpg', 'png', $path));
 
-                    Terminal::log(Terminal::RED . 'Eski görüntü verisi silindi.', SYSTEM);
+                    logSys(Terminal::RED . 'Eski görüntü verisi silindi.', SYSTEM);
                 }
                 file_put_contents(
-                    ($png = sprintf($staticFile, 'png')),
-                    file_get_contents($this->images[$i])
+                    ($png = sprintf($imageFile, 'png')),
+                    file_get_contents($image->getPath())
                 );
             }else{
                 $this->downloadRandomImage();
 
-                $jpg = sprintf($staticFile, 'jpg');
+                $jpg = sprintf($imageFile, 'jpg');
 
-                Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına çevriliyor...', IMAGE_PROCESSOR);
+                logSys(Terminal::GREEN . 'Görüntü jpg formatından png formatına çevriliyor...', IMAGE_PROCESSOR);
 
                 $this->imageCompress->jpgConvertToPng($jpg);
 
-                Terminal::log(Terminal::GREEN . 'Görüntü jpg formatından png formatına başarıyla çevrildi.', IMAGE_PROCESSOR);
+                logSys(Terminal::GREEN . 'Görüntü jpg formatından png formatına başarıyla çevrildi.', IMAGE_PROCESSOR);
                 unlink($jpg);
 
-                Terminal::log(Terminal::RED . 'Eski görüntü verisi silindi.', SYSTEM);
+                logSys(Terminal::RED . 'Eski görüntü verisi silindi.', SYSTEM);
 
-                $png = sprintf($staticFile, 'png');
+                $png = sprintf($imageFile, 'png');
             }
 
             if($png != null){
-                Terminal::log(Terminal::GREEN . 'Görüntü yeniden boyutlandırıp, yeniden düzenleniyor...', IMAGE_PROCESSOR);
+                logSys(Terminal::GREEN . 'Görüntü yeniden boyutlandırıp, yeniden düzenleniyor...', IMAGE_PROCESSOR);
 
                 $this->imageCompress
                     ->resizeImage($png)
@@ -171,24 +175,24 @@ class Main{
                     ->writeOnImage($png, date('H:i'))
                     ->writeOnImage($png, PHP_EOL . date('d.m.Y'));
 
-                Terminal::log(Terminal::GREEN . 'Görüntü yeniden boyutlandırıldı ve düzenlendi. Görüntü verisi kaydedildi.', IMAGE_PROCESSOR);
+                logSys(Terminal::GREEN . 'Görüntü yeniden boyutlandırıldı ve düzenlendi. Görüntü verisi kaydedildi.', IMAGE_PROCESSOR);
 
                 try{
                     $this->instagram->account->changeProfilePicture($png);
 
-                    Terminal::log(Terminal::GREEN . 'Profil fotoğrafınız güncellendi.', API);
+                    logSys(Terminal::GREEN . 'Profil fotoğrafınız güncellendi.', API);
                 }catch(Exception $exception){
-                    Terminal::log(Terminal::RED . 'Profil fotoğrafı bir sebepten dolayı değiştirilemedi. Program kapatılıyor. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
+                    logSys(Terminal::RED . 'Profil fotoğrafı bir sebepten dolayı değiştirilemedi. Program kapatılıyor. Hata: ' . Terminal::WHITE . $exception->getMessage(), API);
                 }
 
                 $sleep = 60 - (time() % 60);
-                Terminal::log(Terminal::GOLD . 'Bir dahaki güncelleme için ' . Terminal::AQUA . $sleep . Terminal::GOLD . ' saniye bekleniyor...');
+                logSys(Terminal::GOLD . 'Bir dahaki güncelleme için ' . Terminal::AQUA . $sleep . Terminal::GOLD . ' saniye bekleniyor...');
 
                 $i++;
 
                 usleep(($sleep * 1000000) - 500000);
             }else{
-                Terminal::log(Terminal::RED . 'Sistem belirlenemeyen bir hata sebebi ile çöktü.', SYSTEM);
+                logSys(Terminal::RED . 'Sistem belirlenemeyen bir hata sebebi ile çöktü.', SYSTEM);
                 exit(1);
             }
         }
