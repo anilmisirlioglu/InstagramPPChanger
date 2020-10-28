@@ -1,8 +1,9 @@
+# PROJECT DEPRECATED
+
 # Instagram PP Changer v1.4
+
 # ![Instagram Logo](src/Artemis/assets/images/static/instagram.png) 
 Instagram profil fotoğrafınızı dakika başı o anki tarihe göre farklı resimler ile günceller.
-
-**NOT:** *Yazılım beta sürecindedir. Hataları [@kodportali](https://www.instagram.com/kodportali/) instagram hesabı üzerinden bildirebilirsiniz.*
 
 ## Ekran Görüntüsü
 ![SS](src/Artemis/assets/images/static/screenshoot.png)
@@ -40,24 +41,15 @@ config.json dosyasınde belirtilen yerlere kullanıcı adınız ve şifrenizi ya
     
 ### Yazılımı Nasıl Çalıştıracağım?
 Yazılımı buradan indirip kullandığınız platforma göre başlatın. Eğer windows kullanıyorsanız 'start.cmd' veya 'start.ps1' dosyasına çift tıklayıp çalıştırmanız yeterlidir. Linux kullanıcıları projeyi klonlayıp yazılımın kök dizinine gidip './start.sh' yazması yeterli olucaktır. Sadece komut arayüzünde (cli) çalışır. Ayrıca çalış tırmadan önce composer'i kurmayı unutmayınız.
-    
-   
+      
 ### Yazılımı Bir Kere Çalıştırdıktan Sonra Kapatsak Sorun Olurmur?
 Eğer her dakika güncellenmesini istiyorsanız yazılımın her daim açık kalması gerekir. Kapattığınız taktirde profil fotoğrafınızı değiştirmeyide durdurur. 
-    
-    
+        
 ### Çalıştırdığımız Zaman PHP Extension Hatası Alıyorum, Neden?
 Bunun sebebi gerekli php eklentilerinin kurulu olmamasıdır. Bunun için dosya içinde bulunan 'bin' dosyasını kullanın.
-    
     
 ### cURL Hatası Alıyorum, Neden?
 Proje içindeki 'bin/php/cacert.pem' dosyasının, dosya yolunu yine aynı 'bin/php' içindeki 'php.ini' dosyasındaki 'curl.cainfo' karşısına yapıştırın. 
 
 ### Kendi ülkemin zaman dilimini nasıl ayarlayabilirim?
 'congig.json' dosyası içerisindeki 'timezone' değerini değiştirerek kendi ülkenin zaman dilimine ayarlayabilirsin. PHP tarafından desteklenen tüm zaman dilimleri için bu linke bakın: https://www.php.net/manual/tr/timezones.php
-
----
-# LICENSE
-[License](LICENSE)
----
-![kodportali](src/Artemis/assets/images/static/kodportali.png)
